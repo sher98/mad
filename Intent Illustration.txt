@@ -1,0 +1,197 @@
+XML Code:
+
+activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <Button
+ android:id="@+id/b1"
+ android:layout_width="169dp"
+ android:layout_height="75dp"
+ android:layout_marginTop="260dp"
+ android:text="Generate"
+ android:onClick="randgen"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+ <Button
+ android:id="@+id/b2"
+ android:layout_width="169dp"
+ android:layout_height="75dp"
+ android:layout_marginTop="404dp"
+ android:text="Send"
+ android:onClick="send"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+activity_ac2.xml:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <Button
+ android:id="@+id/b1"
+ android:layout_width="169dp"
+ android:layout_height="75dp"
+ android:layout_marginTop="260dp"
+ android:text="Generate"
+ android:onClick="randgen"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+ <Button
+ android:id="@+id/b2"
+ android:layout_width="169dp"
+ android:layout_height="75dp"
+ android:layout_marginTop="404dp"
+ android:text="Send"
+ android:onClick="send"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+activity_ac3.xml:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".ac3">
+ <Button
+ android:id="@+id/button"
+ android:layout_width="165dp"
+ android:layout_height="95dp"
+ android:text="Display"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ android:onClick="disp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+Java Code:
+
+MainActivity.java:
+package com.example.intentexample;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+import java.util.Random;
+public class MainActivity extends AppCompatActivity {
+ int x;
+ String s;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ }
+ public void randgen(View view) {
+ Random r=new Random();
+ x=r.nextInt(100);
+ s=String.valueOf(x);
+ Toast.makeText(this,String.valueOf(x),Toast.LENGTH_SHORT).show();
+ }
+ public void send(View view) {
+ Intent i=new Intent(this,ac2.class);
+ i.putExtra("op1",s);
+ startActivity(i);
+ }
+}
+
+
+ac2.java:
+
+package com.example.intentexample;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+import java.util.Random;
+public class ac2 extends AppCompatActivity {
+ int op1,op2;
+ String s,s2;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_ac2);
+ Intent i=getIntent();
+ try {
+ op1 = Integer.parseInt(i.getStringExtra("op1"));
+ s2=String.valueOf(op1);
+ }catch (Exception e)
+ {
+ Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+ }
+ }
+ public void randgen(View view) {
+ Random r=new Random();
+ op2=r.nextInt(100);
+ s=String.valueOf(op2);
+ Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+ }
+ public void send(View view) {
+ Intent i=new Intent(this,ac3.class);
+ i.putExtra("op1",s);
+ i.putExtra("op2",s2);
+ startActivity(i);
+ }
+}
+
+
+ac3.java:
+
+package com.example.intentexample;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+public class ac3 extends AppCompatActivity {
+ int op1,op2;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_ac3);
+ Intent i=getIntent();
+ op1=Integer.parseInt(i.getStringExtra("op1"));
+ op2=Integer.parseInt(i.getStringExtra("op2"));
+ }
+ public void disp(View view) {
+ AlertDialog.Builder alert=new AlertDialog.Builder(ac3.this);
+ alert.setTitle("The Result is");
+ alert.setCancelable(false);
+ alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+ @Override
+ public void onClick(DialogInterface dialog, int which) {
+ dialog.cancel();
+Intent i=new Intent(getApplicationContext(),MainActivity.class);
+ startActivity(i);
+ }
+ });
+ alert.setMessage("The Result is "+(op1+op2));
+ alert.show();
+ }
+}
