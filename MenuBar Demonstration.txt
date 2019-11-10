@@ -1,0 +1,123 @@
+XML Code: (main_menu.xml)
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+ android:id="@+id/y1"
+ android:title="Ist Year"
+ app:showAsAction="never">
+ <menu>
+ <item
+ android:id="@+id/s1"
+ android:title="SEM 1"
+ app:showAsAction="never"/>
+ <item
+ android:id="@+id/s2"
+ android:title="SEM 2"
+ app:showAsAction="never"/>
+ </menu>
+ </item>
+ <item
+ android:id="@+id/y2"
+ android:title="IInd Year"
+ app:showAsAction="never">
+ <menu>
+ <item
+ android:id="@+id/s3"
+ android:title="SEM 3"
+ app:showAsAction="never"/>
+ <item
+ android:id="@+id/s4"
+ android:title="SEM 4"
+ app:showAsAction="never"/>
+ </menu>
+ </item>
+ <item
+ android:id="@+id/y3"
+ android:title="IIIrd Year"
+ app:showAsAction="never">
+ <menu>
+ <item
+ android:id="@+id/s5"
+ android:title="SEM 5"
+app:showAsAction="never"/>
+ <item
+ android:id="@+id/s6"
+ android:title="SEM 6"
+ app:showAsAction="never"/>
+ </menu>
+ </item>
+ <item
+ android:id="@+id/y4"
+ android:title="IVth Year"
+ app:showAsAction="never">
+ <menu>
+ <item
+ android:id="@+id/s7"
+ android:title="SEM 7"
+ app:showAsAction="never"/>
+ <item
+ android:id="@+id/s8"
+ android:title="SEM 8"
+ app:showAsAction="never"/>
+ </menu>
+ </item>
+</menu>
+Java Code:
+package com.example.menubar;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ }
+ @Override
+ public boolean onCreateOptionsMenu(Menu menu) {
+ MenuInflater inflater=getMenuInflater();
+ inflater.inflate(R.menu.main_menu,menu);
+ return true;
+ }
+ @Override
+ public boolean onOptionsItemSelected(MenuItem item) {
+ int id=item.getItemId();
+ if(id==R.id.s1)
+ {
+ Toast.makeText(this,"9.21",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s2)
+ {
+ Toast.makeText(this,"10",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s3)
+ {
+ Toast.makeText(this,"10",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s4)
+ {
+ Toast.makeText(this,"9.96",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s5)
+ {
+ Toast.makeText(this,"9.79",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s6)
+ {
+ Toast.makeText(this,"9.8",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s7)
+ {
+ Toast.makeText(this,"10",Toast.LENGTH_SHORT).show();
+ }
+ if(id==R.id.s8)
+ {
+ Toast.makeText(this,"10",Toast.LENGTH_SHORT).show();
+ }
+ return super.onOptionsItemSelected(item);
+ }
+}
