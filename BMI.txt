@@ -1,0 +1,201 @@
+XML Code:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <EditText
+ android:id="@+id/et1"
+ android:layout_width="211dp"
+ android:layout_height="51dp"
+ android:layout_marginStart="36dp"
+ android:layout_marginLeft="36dp"
+ android:layout_marginTop="64dp"
+ android:ems="10"
+ android:hint="Weight in Kg"
+ android:inputType="numberDecimal"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+ <EditText
+ android:id="@+id/et2"
+ android:layout_width="219dp"
+ android:layout_height="55dp"
+ android:layout_marginStart="36dp"
+ android:layout_marginLeft="36dp"
+ android:layout_marginTop="20dp"
+ android:ems="10"
+ android:hint="Height"
+ android:inputType="numberDecimal"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/et1" />
+ <Button
+ android:id="@+id/b1"
+ android:layout_width="187dp"
+ android:layout_height="102dp"
+ android:layout_marginStart="88dp"
+ android:layout_marginLeft="88dp"
+ android:layout_marginTop="180dp"
+ android:onClick="calcbmi"
+ android:text="BMI"
+ android:textSize="24sp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/et2" />
+ <RadioGroup
+ android:id="@+id/rg"
+ android:layout_width="90dp"
+ android:layout_height="97dp"
+ android:layout_marginStart="156dp"
+ android:layout_marginLeft="156dp"
+ android:layout_marginTop="52dp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/et2">
+ <RadioButton
+ android:id="@+id/rb1"
+ android:layout_width="68dp"
+ android:layout_height="wrap_content"
+ android:text="cm" />
+ <RadioButton
+ android:id="@+id/rb2"
+ android:layout_width="68dp"
+ android:layout_height="wrap_content"
+ android:text="m" />
+ <RadioButton
+ android:id="@+id/rb3"
+ android:layout_width="72dp"
+ android:layout_height="wrap_content"
+ android:text="feet" />
+ </RadioGroup>
+ <TextView
+ android:id="@+id/textView"
+ android:layout_width="97dp"
+ android:layout_height="53dp"
+ android:layout_marginBottom="79dp"
+ android:text="Select Units for Height"
+ app:layout_constraintBottom_toTopOf="@+id/b1"
+ app:layout_constraintEnd_toStartOf="@+id/rg"
+ app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+Java Code:
+
+package com.example.dhanush1;
+import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+ RadioGroup radioGroup;
+ RadioButton rb;
+ String cal="";
+ EditText et1,et2;
+ double a,b,r;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ }
+ public void onBackPressed()
+ {
+ AlertDialog.Builder a_builder = new AlertDialog.Builder(MainActivity.this);
+ a_builder.setMessage("Do you want to close this App !!!")
+ .setCancelable(false)
+ .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+ @Override
+public void onClick(DialogInterface dialog, int which) {
+ finish();
+ }
+ })
+.setNegativeButton("No",new DialogInterface.OnClickListener() {
+ @Override
+public void onClick(DialogInterface dialog, int which) {
+ dialog.cancel();
+ }
+ }) ;
+ a_builder.setTitle("Exit");
+ a_builder.show();
+ }
+ public void calcbmi(View view) {
+ et1=(EditText)findViewById(R.id.et1);
+ et2=(EditText)findViewById(R.id.et2);
+ a=Double.parseDouble(et1.getText().toString());
+ b=Double.parseDouble(et2.getText().toString());
+ int in=7,ft=0;
+ try {
+ radioGroup = (RadioGroup) findViewById(R.id.rg);
+ rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+ cal = rb.getText().toString();
+ if(cal.equals("cm"))
+ {
+ b=b*0.01;
+ }
+ else if(cal.equals("feet"))
+ {
+ String h=String.valueOf(et2.getText());
+ h=h.substring(h.indexOf('.')+1);
+ in=Integer.parseInt(h);
+h=String.valueOf(et2.getText());
+ h=h.substring(0,h.indexOf('.'));
+ ft=Integer.parseInt(h);
+ b=((ft*12)+in)*2.54*0.01;
+ }
+ else if(cal.equals("m"))
+ {
+ b=b;
+ }
+ if(!(in>=0 && in<=12))
+ {
+ Toast.makeText(this,"Inch should be from 1 to
+12",Toast.LENGTH_SHORT).show();
+ }
+ else
+ {
+ AlertDialog.Builder alert = new
+AlertDialog.Builder(MainActivity.this);
+ alert.setTitle("BMI Result");
+alert.setCancelable(false);
+alert.setPositiveButton("OK",new DialogInterface.OnClickListener()
+{
+ @Override
+public void onClick(DialogInterface dialog, int which) {
+ dialog.cancel();
+ }
+ });
+r=a/(b*b);
+ if(r<18.5)
+ {
+ alert.setMessage("BMI: "+r+"\nUnder Weight");
+ }
+ else if(r>=18.5 && r<=24.9)
+ {
+ alert.setMessage("BMI: "+r+"\nNormal Weight");
+ }
+else if(r>=25 && r<=29.9)
+ {
+ alert.setMessage("BMI: "+r+"\nOver Weight");
+ }
+else if(r>=30)
+ {
+ alert.setMessage("BMI: "+r+"\nObesity");
+ }
+alert.show();
+ }
+ }
+ catch (Exception e)
+ {
+ Toast.makeText(this,"Please select units for
+Height",Toast.LENGTH_SHORT).show();
+ }
+ }
+}
