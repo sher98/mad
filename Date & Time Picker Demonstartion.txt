@@ -1,0 +1,145 @@
+XML CODE:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <EditText
+ android:id="@+id/et1"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginStart="44dp"
+ android:layout_marginTop="180dp"
+ android:ems="10"
+ android:inputType="textPersonName"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+ <Button
+ android:id="@+id/b1"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginStart="36dp"
+ android:onClick="getdate"
+ android:layout_marginTop="180dp"
+ android:text="Date"
+ app:layout_constraintStart_toEndOf="@+id/et1"
+ app:layout_constraintTop_toTopOf="parent" />
+ <EditText
+ android:id="@+id/et2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginStart="44dp"
+ android:layout_marginTop="80dp"
+ android:ems="10"
+ android:inputType="textPersonName"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/et1" />
+ <Button
+ android:id="@+id/b2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginStart="36dp"
+ android:layout_marginTop="76dp"
+ android:text="time"
+ android:onClick="gettime"
+ app:layout_constraintStart_toEndOf="@+id/et2"
+ app:layout_constraintTop_toBottomOf="@+id/b1" />
+ <Button
+ android:id="@+id/b3"
+ android:layout_width="242dp"
+ android:layout_height="62dp"
+ android:layout_marginTop="92dp"
+ android:text="Schedule"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.498"
+ app:layout_constraintStart_toStartOf="parent"
+ android:onClick="getsch"
+ app:layout_constraintTop_toBottomOf="@+id/et2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+JAVA Code:
+
+package com.example.gdss;
+import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import java.util.Calendar;
+public class MainActivity extends AppCompatActivity {
+ int dd,mm,yyyy,H,M;
+ EditText et1,et2;
+ final Calendar c = Calendar.getInstance();
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ et1=(EditText)findViewById(R.id.et1);
+ et2=(EditText)findViewById(R.id.et2);
+ }
+ public void getdate(View view) {
+ yyyy = c.get(Calendar.YEAR);
+ mm = c.get(Calendar.MONTH);
+ dd = c.get(Calendar.DAY_OF_MONTH);
+ DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+ new DatePickerDialog.OnDateSetListener() {
+ @Override
+public void onDateSet(DatePicker view, int year,
+ int monthOfYear, int dayOfMonth) {
+ et1.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" +
+year);
+ }
+ }, yyyy,mm,dd);
+ datePickerDialog.show();
+ }
+ public void gettime(View view) {
+ H = c.get(Calendar.HOUR_OF_DAY);
+ M = c.get(Calendar.MINUTE);
+ // Launch Time Picker Dialog
+ TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+ new TimePickerDialog.OnTimeSetListener() {
+ @Override
+public void onTimeSet(TimePicker view, int hourOfDay,
+ int minute) {
+ et2.setText(hourOfDay + ":" + minute);
+ }
+ }, H,M, false);
+ timePickerDialog.show();
+ }
+ public void getsch(View view) {
+ String st1=et1.getText().toString();
+ String st2=et2.getText().toString();
+ AlertDialog.Builder alert=new AlertDialog.Builder(MainActivity.this);
+ alert.setTitle("The Schedule");
+ alert.setCancelable(false);
+ alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+ @Override
+ public void onClick(DialogInterface dialog, int which) {
+ dialog.cancel();
+ }
+ });
+ if(st1.length()==0 || st2.length()==0)
+ {
+ alert.setMessage("You have not choosen the Date or Time\nPlease do
+choose");
+ }
+ else
+ {
+ alert.setMessage("Your Schedule is :\nDate: "+st1+" Time: "+st2);
+ et1.setText("");
+ et2.setText("");
+ }
+ alert.show();
+ }
+}
